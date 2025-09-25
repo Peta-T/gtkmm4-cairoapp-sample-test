@@ -13,7 +13,7 @@
 #include <cairomm/context.h>
 #include <cairomm/cairomm.h>
 #include <fstream>
-#include <memory> // Potřebné pro std::dynamic_pointer_cast
+#include <memory> 
 #include <gdk/gdkkeysyms.h>
 #include <map>
 #include <cmath>
@@ -43,10 +43,6 @@
 #include <librsvg/rsvg.h> // Include librsvg for SVG handling
 #include <cstdio> // For std::remove
 
-// Původní funkce escLatexCh je odstraněna, protože by narušovala LaTeXovou syntaxi vzorců.
-// Pokud by bylo potřeba escapovat speciální znaky v prostém textu, musela by být implementována jinak,
-// nebo by uživatel musel zadávat escapování ručně.
-
 // LaTeX to SVG conversion function (from user's provided code)
 int latex2svg(const std::string& equ, const std::string& output_filename_base)
 {
@@ -60,15 +56,14 @@ int latex2svg(const std::string& equ, const std::string& output_filename_base)
    std::ofstream myfile;
     myfile.open(tex_filename);
     myfile << "\\documentclass[class=article,border=2pt]{standalone}" << std::endl;
-    myfile << "\\usepackage{amsmath}" << std::endl; // Stále dobré mít pro matematické režimy
+    myfile << "\\usepackage{amsmath}" << std::endl; 
     myfile << "\\usepackage{amssymb}" << std::endl;
     myfile << "\\usepackage[utf8]{inputenc}" << std::endl;
-    myfile << "\\usepackage[T1]{fontenc}" << std::endl; // *** Přidáno: Pro správné kódování fontů a zobrazení diakritiky ***
+    myfile << "\\usepackage[T1]{fontenc}" << std::endl; 
     myfile << "\\usepackage[czech]{babel}" << std::endl;
     myfile << "\\begin{document}" << std::endl;
-    // Použijeme minipage s definovanou šířkou
-    myfile << "\\noindent\\begin{minipage}{20cm}" << std::endl; // Zde je šířka 5 cm. Můžete upravit.
-    myfile << equ << std::endl;                               // 'equ' bude obsahovat text s '\newline' a in-line mat.
+    myfile << "\\noindent\\begin{minipage}{20cm}" << std::endl; 
+    myfile << equ << std::endl;                               
     myfile << "\\end{minipage}" << std::endl;
     myfile << "\\end{document}" << std::endl;
     myfile.close();
@@ -210,8 +205,8 @@ public:
     double m_scale_factor; // Scale factor for the SVG
     bool m_flip_horizontal; // NEW: Flag to indicate if the SVG should be flipped horizontally
 
-    SvgObject(RsvgHandle* handle, Glib::RefPtr<Point2D> pos, double scale = 1.0, bool flip_h = false) // NEW parameter
-        : m_svg_handle(handle), m_position(pos), m_scale_factor(scale), m_flip_horizontal(flip_h) { // NEW initialization
+    SvgObject(RsvgHandle* handle, Glib::RefPtr<Point2D> pos, double scale = 1.0, bool flip_h = false) 
+        : m_svg_handle(handle), m_position(pos), m_scale_factor(scale), m_flip_horizontal(flip_h) { 
         if (m_svg_handle) {
             g_object_ref(m_svg_handle); // Increment reference count
         }
@@ -223,8 +218,8 @@ public:
         }
     }
 
-    static Glib::RefPtr<SvgObject> create(RsvgHandle* handle, Glib::RefPtr<Point2D> pos, double scale = 1.0, bool flip_h = false) { // NEW parameter
-        return Glib::make_refptr_for_instance(new SvgObject(handle, pos, scale, flip_h)); // NEW parameter
+    static Glib::RefPtr<SvgObject> create(RsvgHandle* handle, Glib::RefPtr<Point2D> pos, double scale = 1.0, bool flip_h = false) { 
+        return Glib::make_refptr_for_instance(new SvgObject(handle, pos, scale, flip_h)); 
     }
 };
 
@@ -377,13 +372,13 @@ private:
   bool m_is_drawing_line;
   bool m_first_click_for_line;
 
-  bool m_is_placing_svg; // New: Flag for SVG placement mode
-  Glib::ustring m_svg_file_to_place; // New: Stores filename for SVG to be placed
-  double m_current_svg_placement_scale; // New: Stores the scale factor for the SVG being placed
-  bool m_current_svg_placement_flip_horizontal; // NEW: Stores if the SVG should be horizontally flipped
+  bool m_is_placing_svg; 
+  Glib::ustring m_svg_file_to_place; 
+  double m_current_svg_placement_scale; 
+  bool m_current_svg_placement_flip_horizontal; 
 
-  RsvgHandle* m_preview_svg_handle; // New: For dynamic SVG preview
-  Glib::ustring m_preview_svg_filename; // New: Stores filename for the preview
+  RsvgHandle* m_preview_svg_handle; 
+  Glib::ustring m_preview_svg_filename; 
 
   Glib::RefPtr<Gtk::EventControllerKey> m_key_controller;
   Glib::RefPtr<Gtk::TreeStore> m_refTreeModel;
@@ -440,8 +435,7 @@ public:
   bool toggle_line_drawing_mode();
   sigc::signal<void(bool)> signal_line_drawing_mode_changed;
   sigc::signal<void(double, double)> signal_cursor_moved;
-  sigc::signal<void(bool)> signal_svg_placement_mode_changed; // New signal for SVG placement status
-
+  sigc::signal<void(bool)> signal_svg_placement_mode_changed; 
   bool get_first_click_for_line() const { return m_first_click_for_line; }
   void set_first_click_for_line(bool value) { m_first_click_for_line = value; }
   Glib::RefPtr<Point2D> get_line_start_point() const { return m_line_start_point; }
@@ -495,7 +489,7 @@ DrwArea::DrwArea()
   m_is_placing_svg = false; // Initialize new flag
   m_svg_file_to_place = "";
   m_current_svg_placement_scale = 1.0; // Initialize new scale factor
-  m_current_svg_placement_flip_horizontal = false; // NEW: Initialize flip flag
+  m_current_svg_placement_flip_horizontal = false; 
   m_preview_svg_handle = nullptr; // Initialize new preview handle
   m_preview_svg_filename = "";
 
@@ -812,9 +806,9 @@ void DrwArea::on_primary_mouse_click(int , double x, double y)
 
             m_first_click_for_line = false;
             m_highlighted_point = nullptr;
-        } // Konec 'else' pro if (!m_first_click_for_line)
-    } // Zde je uzavírací závorka pro 'if (m_is_drawing_line)'
-    else { // Toto je 'else' pro 'if (m_is_drawing_line)'
+        } 
+    } 
+    else { 
         Glib::RefPtr<Line> clicked_line = find_closest_line(x, y, 5.0);
 
         if (m_tree_view_ptr && m_refTreeModel && m_Columns_ptr) {
@@ -951,7 +945,7 @@ Glib::RefPtr<Point2D> DrwArea::find_closest_point(double mouse_x, double mouse_y
                 ObjectType obj_type = child_row[m_Columns_ptr->m_col_object_type];
                 if (obj_type == ObjectType::POINT) {
                     Glib::RefPtr<Glib::Object> generic_obj = child_row[m_Columns_ptr->m_col_generic_object];
-                    // Změna zde: Použití std::dynamic_pointer_cast
+                    
                     Glib::RefPtr<Point2D> point_obj = std::dynamic_pointer_cast<Point2D>(generic_obj);
                     if (point_obj) {
                         Glib::RefPtr<Point2D> screen_point = drawing_to_screen_coords(point_obj->x, point_obj->y);
@@ -982,7 +976,7 @@ Glib::RefPtr<Line> DrwArea::find_closest_line(double mouse_x, double mouse_y, do
             ObjectType obj_type = row[m_Columns_ptr->m_col_object_type];
             if (obj_type == ObjectType::LINE) {
                 Glib::RefPtr<Glib::Object> generic_obj = row[m_Columns_ptr->m_col_generic_object];
-                // Změna zde: Použití std::dynamic_pointer_cast
+                
                 Glib::RefPtr<Line> line_obj = std::dynamic_pointer_cast<Line>(generic_obj);
                 if (line_obj) {
                     Glib::RefPtr<Point2D> p1_screen = drawing_to_screen_coords(line_obj->start_point->x, line_obj->start_point->y);
@@ -1037,7 +1031,7 @@ void DrwArea::zoom_to_all_points()
             ObjectType obj_type = row[m_Columns_ptr->m_col_object_type];
             if (obj_type == ObjectType::LINE) {
                 Glib::RefPtr<Glib::Object> generic_obj = row[m_Columns_ptr->m_col_generic_object];
-                // Změna zde: Použití std::dynamic_pointer_cast
+                
                 Glib::RefPtr<Line> line_obj = std::dynamic_pointer_cast<Line>(generic_obj);
                 if (line_obj) {
                     min_x = std::min(min_x, line_obj->start_point->x);
@@ -1054,8 +1048,8 @@ void DrwArea::zoom_to_all_points()
             // Check for SVG objects' positions
             else if (obj_type == ObjectType::SVG) {
                 Glib::RefPtr<Glib::Object> generic_obj = row[m_Columns_ptr->m_col_generic_object];
-                // Změna zde: Použití std::dynamic_pointer_cast
                 Glib::RefPtr<SvgObject> svg_obj = std::dynamic_pointer_cast<SvgObject>(generic_obj);
+
                 if (svg_obj && svg_obj->m_svg_handle) {
                     gdouble svg_intrinsic_width, svg_intrinsic_height;
                     // Replaced deprecated rsvg_handle_get_dimensions with rsvg_handle_get_intrinsic_size_in_pixels
@@ -1076,7 +1070,7 @@ void DrwArea::zoom_to_all_points()
                 ObjectType child_obj_type = child_row[m_Columns_ptr->m_col_object_type];
                 if (child_obj_type == ObjectType::POINT) {
                     Glib::RefPtr<Glib::Object> generic_obj = child_row[m_Columns_ptr->m_col_generic_object];
-                    // Změna zde: Použití std::dynamic_pointer_cast
+                   
                     Glib::RefPtr<Point2D> point_obj = std::dynamic_pointer_cast<Point2D>(generic_obj);
                     if (point_obj) {
                         min_x = std::min(min_x, point_obj->x);
@@ -1259,7 +1253,7 @@ void DrwArea::draw_content_to_cairo_context(const Cairo::RefPtr<Cairo::Context>&
             ObjectType obj_type = row[m_Columns_ptr->m_col_object_type];
             if (obj_type == ObjectType::LINE) {
                 Glib::RefPtr<Glib::Object> generic_obj = row[m_Columns_ptr->m_col_generic_object];
-                // Změna zde: Použití std::dynamic_pointer_cast
+                
                 Glib::RefPtr<Line> line_obj = std::dynamic_pointer_cast<Line>(generic_obj);
                 if (line_obj) {
                     cr->set_source_rgb(line_obj->color_r, line_obj->color_g, line_obj->color_b);
@@ -1279,7 +1273,7 @@ void DrwArea::draw_content_to_cairo_context(const Cairo::RefPtr<Cairo::Context>&
                 }
             } else if (obj_type == ObjectType::SVG) { // Draw SVG objects
                 Glib::RefPtr<Glib::Object> generic_obj = row[m_Columns_ptr->m_col_generic_object];
-                // Změna zde: Použití std::dynamic_pointer_cast
+                
                 Glib::RefPtr<SvgObject> svg_obj = std::dynamic_pointer_cast<SvgObject>(generic_obj);
                 if (svg_obj && svg_obj->m_svg_handle) {
                     cr->save();
@@ -1317,7 +1311,7 @@ void DrwArea::draw_content_to_cairo_context(const Cairo::RefPtr<Cairo::Context>&
                 ObjectType child_obj_type = child_row[m_Columns_ptr->m_col_object_type];
                 if (child_obj_type == ObjectType::POINT) {
                     Glib::RefPtr<Glib::Object> generic_obj = child_row[m_Columns_ptr->m_col_generic_object];
-                    // Změna zde: Použití std::dynamic_pointer_cast
+                    
                     Glib::RefPtr<Point2D> point_obj = std::dynamic_pointer_cast<Point2D>(generic_obj);
                     if (point_obj) {
                         cr->arc(point_obj->x, point_obj->y, 1.0, 0, 2 * M_PI);
@@ -1396,7 +1390,7 @@ void DrwArea::draw_content_to_cairo_context(const Cairo::RefPtr<Cairo::Context>&
 
     cr->save();
     cr->scale(1.0, -1.0);
-    // Změna fontu z "Bitstream Charter" na "Sans" pro lepší vyhlazení
+    
     auto font = Cairo::ToyFontFace::create("Sans", Cairo::ToyFontFace::Slant::NORMAL, Cairo::ToyFontFace::Weight::NORMAL);
     cr->set_font_face(font);
     cr->set_font_size(20);
@@ -1471,7 +1465,7 @@ void DrwArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr, int width, int he
             ObjectType obj_type = row[m_Columns_ptr->m_col_object_type];
             if (obj_type == ObjectType::LINE) {
                 Glib::RefPtr<Glib::Object> generic_obj = row[m_Columns_ptr->m_col_generic_object];
-                // Změna zde: Použití std::dynamic_pointer_cast
+                
                 Glib::RefPtr<Line> line_obj = std::dynamic_pointer_cast<Line>(generic_obj);
                 if (line_obj) {
                     bool is_currently_selected = false;
@@ -1501,7 +1495,7 @@ void DrwArea::on_draw(const Cairo::RefPtr<Cairo::Context>& cr, int width, int he
                 ObjectType child_obj_type = child_row[m_Columns_ptr->m_col_object_type];
                 if (child_obj_type == ObjectType::POINT) {
                     Glib::RefPtr<Glib::Object> generic_obj = child_row[m_Columns_ptr->m_col_generic_object];
-                    // Změna zde: Použití std::dynamic_pointer_cast
+                    
                     Glib::RefPtr<Point2D> point_obj = std::dynamic_pointer_cast<Point2D>(generic_obj);
                     if (point_obj) {
                         if (m_highlighted_point && m_highlighted_point == point_obj) {
@@ -1698,8 +1692,8 @@ LaTeXInputDialog::LaTeXInputDialog(Gtk::Window& parent)
 
     m_text_view.set_hexpand(true);
     m_text_view.set_vexpand(true);
-    // Změněn výchozí text na matematický vzorec pro testování
-    m_text_view.get_buffer()->set_text("Příliš žluťoučký kůň úpěl ďábelské ódy \\ $\\alpha^2 + \\beta_1 = \\frac{1}{2}$"); // Default text
+    
+    m_text_view.get_buffer()->set_text("\\ $\\alpha^2 + \\beta_1 = \\frac{1}{2}$"); // Default text
     m_scrolled_window.set_child(m_text_view);
     m_scrolled_window.set_policy(Gtk::PolicyType::AUTOMATIC, Gtk::PolicyType::AUTOMATIC);
     m_scrolled_window.set_hexpand(true);
@@ -2774,9 +2768,6 @@ void WinMain::on_toolbar_import_latex_clicked()
                 // Define a temporary filename for the SVG output
                 Glib::ustring temp_svg_filename = "tmp_latex.svg";
                 Glib::ustring temp_base_filename = "tmp_latex";
-
-                // PŘÍMÉ PŘEDÁNÍ TEXTU: Není potřeba escapování pro LaTeX vzorce.
-                // Glib::ustring je UTF-8, což by mělo být v pořádku pro pdflatex s inputenc{utf8}.
                 int result = latex2svg(latex_text.raw(), temp_base_filename.raw());
 
                 if (result == 0) {
@@ -3174,8 +3165,7 @@ const char* PROGRAMNAME_LOCALEDIR = "locale";
 
 int main(int argc, char* argv[])
 {
-    // Nastavení locale pro C standardní knihovny
-    // Pokusí se nastavit na cs_CZ.UTF-8, jinak použije výchozí
+    
     const char* preferred_locale = "cs_CZ.UTF-8";
     if (std::setlocale(LC_ALL, preferred_locale) == NULL) {
         std::cerr << "Warning: Could not set locale to " << preferred_locale << ". Trying default." << std::endl;
@@ -3183,12 +3173,10 @@ int main(int argc, char* argv[])
             std::cerr << "Error: Could not set any locale. Text encoding issues may occur." << std::endl;
         }
     }
-    // Nastavení globálního C++ locale a imbue pro cout/cerr
     std::locale::global(std::locale(""));
     std::cout.imbue(std::locale());
     std::cerr.imbue(std::locale());
 
-    // Čtení nastavení LANG z appconfig.cfg
     std::string lang_setting;
     std::ifstream myfilei("appconfig.cfg");
     if (myfilei.is_open()) {
@@ -3197,15 +3185,14 @@ int main(int argc, char* argv[])
         std::cout << "Preference settings for LANG from appconfig.cfg: " << lang_setting << std::endl;
     } else {
         std::cerr << "Warning: appconfig.cfg not found. Using default locale for Glib/GTK." << std::endl;
-        // Pokud appconfig.cfg není nalezen, použijte stejné preferované locale pro Glib
+        
         lang_setting = preferred_locale;
     }
 
-    // Nastavení proměnné prostředí LANG pro Glib/GTK
+    
     Glib::setenv("LANG", lang_setting.c_str(), true);
     std::cout << "LANG environment variable after Glib::setenv: " << getenv("LANG") << std::endl;
 
-    // Bind textdomain pro i18n
     bindtextdomain(GETTEXT_PACKAGE, PROGRAMNAME_LOCALEDIR);
     bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
     textdomain(GETTEXT_PACKAGE);
