@@ -1,6 +1,7 @@
 // app can create and delete 2d lines, import svg files and pdfexport and print, work on Debian 13 and Windows
 // for create Latex svg is nessesary have installed: 
 //  pacman -S mingw-w64-ucrt-x86_64-texlive-full
+//  pdflatex.exe is nessesary copy from MikTex instalation to c:\msys64\mingw64\bin\ folder
 //  pacman -S mingw-w64-x86_64-pdf2svg
 //compile:
 //g++ -std=c++17 main.cc -o app $(pkg-config --cflags --libs gtkmm-4.0 librsvg-2.0)
