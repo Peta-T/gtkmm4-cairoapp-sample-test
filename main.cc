@@ -1,5 +1,7 @@
 // app can create and delete 2d lines, import svg files and pdfexport and print, work on Debian 13 and Windows
-// for create Latex svg is nessesary have installed pdflatex annd other tex packages
+// for create Latex svg is nessesary have installed: 
+//  pacman -S mingw-w64-ucrt-x86_64-texlive-full
+//  pacman -S mingw-w64-x86_64-pdf2svg
 //compile:
 //g++ -std=c++17 main.cc -o app $(pkg-config --cflags --libs gtkmm-4.0 librsvg-2.0)
 //with icons:
@@ -1314,7 +1316,7 @@ void DrwArea::draw_content_to_cairo_context(const Cairo::RefPtr<Cairo::Context>&
                     
                     Glib::RefPtr<Point2D> point_obj = std::dynamic_pointer_cast<Point2D>(generic_obj);
                     if (point_obj) {
-                        cr->arc(point_obj->x, point_obj->y, 1.0, 0, 2 * M_PI);
+                        cr->arc(point_obj->x, point_obj->y, 1.0, 0, 2 * G_PI);
                         cr->set_source_rgb(0.0, 0.0, 0.0);
                         cr->fill();
                     }
@@ -3165,7 +3167,7 @@ const char* PROGRAMNAME_LOCALEDIR = "locale";
 
 int main(int argc, char* argv[])
 {
-    
+   /* 
     const char* preferred_locale = "cs_CZ.UTF-8";
     if (std::setlocale(LC_ALL, preferred_locale) == NULL) {
         std::cerr << "Warning: Could not set locale to " << preferred_locale << ". Trying default." << std::endl;
@@ -3196,7 +3198,7 @@ int main(int argc, char* argv[])
     bindtextdomain(GETTEXT_PACKAGE, PROGRAMNAME_LOCALEDIR);
     bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
     textdomain(GETTEXT_PACKAGE);
-
+*/
     try {
         auto app = App2d::create();
         int result = app->run(argc, argv);
