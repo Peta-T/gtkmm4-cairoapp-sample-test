@@ -39,16 +39,16 @@ When prompted, just hit return. Sit back and wait for it to install what’s alm
 
 Before continuing you may change to another directory. It easiest to type cd followed by a space and drop the folder you want to change to on the window.
 
-5.) Clone gtkmm4-gesture-ai-sample-test by type/paste on commandline:
+5.) Clone gtkmm4-cairoapp-sample-test by type/paste on commandline:
 ---------------------------------------------------------------------
 
-   git clone https://github.com/Peta-T/gtkmm4-gesture-ai-sample-test \
-   cd gtkmm4-gesture-ai-sample-test
+   git clone https://github.com/Peta-T/gtkmm4-cairoapp-sample-test \
+   cd gtkmm4-cairoapp-sample-test
 
 6.) Build it - type on command line:
 ------------------------------------
 
-   g++ -std=c++20 main.cc \`pkg-config --cflags --libs gtkmm-4.0 \` -o app -g
+   g++ -std=c++17 main.cc resource.c -o app $(pkg-config --cflags --libs gtkmm-4.0 librsvg-2.0)
 
 7.) Run app - type on command line:
 -----------------------------------
