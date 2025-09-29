@@ -33,6 +33,7 @@ Type/paste
    zip \\ \
    unzip \\ \
    git \\ \
+   mingw-w64-x86_64-librsvg \\ \
    --needed
 
 When prompted, just hit return. Sit back and wait for it to install what’s almost a complete linux environment.
