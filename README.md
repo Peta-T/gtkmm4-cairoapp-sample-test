@@ -1,5 +1,6 @@
-# gtkmm4-cairoapp-sample-test
+# gtkmm4 Application using Cairo canvas sample test
 This small complex sample C++ code which try show possibility using gtkmm4 and Cairo, this code is possible to build and run on Debian13 or on Windows in MSYS2 enviroment.
+Application can draw lines, interactively zoom and pan view by mouse can insert svg images from files and math eqoution rendered from Latex (now linux verison only) can also generate pdf file from page and prit page. 
 
 ![Screenschot](Screenshot.png)
 
